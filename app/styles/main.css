@@ -1,0 +1,74 @@
+.tab-search,
+.tab-search input,
+.tab-list {
+  box-sizing: border-box;
+}
+.tab-search {
+  position: fixed;
+  top: 30%;
+  width: 70%;
+  height: 70px;
+  margin-left: 15%;
+  opacity: 0;
+  z-index: 500;
+  transform: translateY(20px) scale(.85);
+  transition: all .25s ease-out;
+}
+.tab-search.fadeIn {
+  opacity: 1;
+  transform: translateY(0) scale(.9999);
+}
+.tab-search input,
+.tab-search input:focus {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 8px 16px;
+  font-size: 38px;
+  line-height: normal;
+  background: rgba(255,255,255,.96);
+  border: none;
+  border-radius: 4px;
+  z-index: 300;
+  box-shadow: 0 5px 30px rgba(50,50,50,.85);
+}
+.tab-search input:focus {
+  outline: none;
+}
+.tab-list {
+  max-height: 400px;
+  overflow-y: scroll;
+  padding-top: 15px;
+}
+.tab-item {
+  width: 90%;
+  margin: 0 auto 15px;
+  padding: 10px 20px;
+  background: white;
+  border-radius: 4px;
+  text-align: left;
+  box-shadow: 0 0 3px rgba(0,0,0,.15);
+  cursor: pointer;
+  transition: background .45s ease-out;
+}
+.tab-item:hover {
+  background: #CFD8DC;
+}
+.tab--title {
+  margin: 15px 0 0;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: normal; 
+  color: #455A64;
+  transition: color .15s ease-out;
+}
+.tab-item:hover .tab--title {
+  color: #37474F;
+}
+.tab--link {
+  margin: 8px 0;
+  font-size: 14px;
+  line-height: 18px;
+  color: #78909C;
+}
