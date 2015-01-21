@@ -1,6 +1,6 @@
 'use strict';
 
-var holder, tabList, port;
+var holder, tabList, _port, _cursor;
 var opened = false;
 var _tabs = [];
 
@@ -22,7 +22,7 @@ function _listTab(tab) {
 
   function navigateTab() {
     _closeSearch();
-    port.postMessage({activate: item.tabId});
+    _port.postMessage({activate: item.tabId});
   }
 
   item.addEventListener('click', navigateTab);
@@ -31,7 +31,9 @@ function _listTab(tab) {
   tabList.appendChild(item);
 }
 
-function _openSearch() {
+function _openSearch(port) {
+  console.log(port);
+  _port = port;
   opened = true;
   holder = document.createElement('div');
   holder.classList.add('tab-search');
@@ -55,14 +57,21 @@ function _openSearch() {
   input.addEventListener('click', function(e) {
     e.stopPropagation();
   }, false);
+  document.addEventListener('keydown', function(e) {
+    if (e.keyCode === 27) {
+      return _closeSearch();
+    }
+  });
   input.addEventListener('keydown', function(e) {
     var val = input.value.trim();
 
-    port.postMessage({
-      query: ''
-    });
+    // por
 
-    if (e.keyCode === 27) {
+    if (e.keyCode === 38) {
+
+    } else if (e.keyCode === 40) {
+
+    } else if (e.keyCode === 27) {
       return _closeSearch();
     } else if (e.keyCode === 8 && val.length === 0) {
       return _closeSearch();
@@ -80,6 +89,8 @@ function _openSearch() {
   input.addEventListener('keyup', function() {
     var val = input.value.trim().toLowerCase();
 
+    _port.postMessage({query: val});
+
     while (tabList.firstChild) {
       tabList.removeChild(tabList.firstChild);
     }
@@ -87,6 +98,8 @@ function _openSearch() {
     if (val.length === 0) {
       return;
     }
+
+    _cursor = null;
 
     var tabs = _tabs.filter(function(tab) {
       return tab.url.indexOf(val) >= 0 || tab.title.trim().toLowerCase().indexOf(val) >= 0;
@@ -109,6 +122,7 @@ function _closeSearch() {
 
     holder = null;
     tabList = null;
+    _port = null;
   }, 250);
 }
 
@@ -137,12 +151,25 @@ function loadTabs(response) {
 }
 
 function TabSearch() {
-  port = chrome.runtime.connect({name: 'tab-search'});
+  chrome.runtime.onConnect.addListener(function(port) {
+    port.onMessage.addListener(function(msg) {
+      if (msg.hasOwnProperty('tabs')) {
+        loadTabs(msg);
 
-  port.postMessage({query: ''});
-  port.onMessage.addListener(loadTabs);
-  chrome.runtime.onMessage.addListener(loadTabs);
+        if (!opened) {
+          _openSearch(port);
+          document.addEventListener('click', _listenBack);
+        }
+      }
+    });
+  });
+
+  // port = chrome.runtime.connect({name: 'tab-search'});
+
+  // port.postMessage({query: ''});
+  // port.onMessage.addListener(loadTabs);
+  // chrome.runtime.onMessage.addListener(loadTabs);
 }
 
-_listen();
+// _listen();
 TabSearch();

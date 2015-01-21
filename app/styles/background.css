@@ -1,0 +1,61 @@
+body {
+  /*background: #f8f8f8;*/
+  background: #cbd9e0;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4, p {
+  font-weight: 400;
+  font-family: 'Open Sans';
+  /*-webkit-font-smoothing: antialiased;*/
+}
+header {
+  padding: 20px 0;
+}
+header,
+.container {
+  text-align: center;
+  color: rgba(55,55,55,.85);
+}
+h4 {
+  font-weight: bold;
+}
+.container p {
+  max-width: 500px;
+  margin: 15px auto;
+  font-size: 16px;
+}
+.container button {
+  margin: 15px 3px;
+  padding: 8px 16px;
+  font-size: 16px;
+  background: none;
+  color: rgba(100,100,100,.85);
+  border: 2px solid;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background .35s ease-out;
+  outline: none;
+}
+
+.container button:hover {
+  background: rgba(100,100,100,.1);
+}
+
+.container button:active {
+  background: rgba(0,0,0,.1);
+}
+.container button.analytics-accept {
+  color: white;
+  background: rgba(68, 138, 255, 1);
+  border-color: rgba(68, 138, 255, 1);
+}
+.container button.analytics-accept:hover {
+  color: white;
+  background: rgba(68, 138, 255, .85);
+  border-color: rgba(68, 138, 255, .85);
+}
+.container button.analytics-accept {
+  color: white;
+  background: rgba(68, 138, 255, 1);
+  border-color: rgba(68, 138, 255, 1);
+}

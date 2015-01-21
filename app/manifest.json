@@ -1,6 +1,6 @@
 {
     "name": "__MSG_appName__",
-    "version": "0.0.2",
+    "version": "0.0.6",
     "manifest_version": 2,
     "description": "__MSG_appDescription__",
     "icons": {
@@ -15,26 +15,19 @@
             "scripts/background.js"
         ]
     },
-    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-    "content_scripts": [
-        {
-            "matches": [
-                "http://*/*",
-                "https://*/*"
-            ],
-            "css": [
-                "styles/main.css"
-            ],
-            "js": [
-                "scripts/contentscript.js"
-            ],
-            "run_at": "document_end",
-            "all_frames": false
+    "commands": {
+        "open-search": {
+            "description": "open search",
+            "global": false,
+            "suggested_key": {
+                "default": "Ctrl+Shift+O",
+                "mac": "Command+Shift+O"
+            }
         }
-    ],
+    },
+    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
     "permissions": [
         "tabs",
-        "http://*/*",
-        "https://*/*"
+        "activeTab"
     ]
 }
