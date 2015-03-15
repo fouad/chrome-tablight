@@ -1,13 +1,12 @@
 'use strict';
 
-var holder, tabList, _port, _cursor;
+var holder, tabList, _port, _cursor, wrapper;
 var opened = false;
 var _tabs = [];
 
 function _listTab(tab) {
   var item = document.createElement('div');
   item.classList.add('tab-item');
-
   var title = document.createElement('h2');
   title.classList.add('tab--title');
   title.innerText = tab.title;
@@ -31,26 +30,51 @@ function _listTab(tab) {
   tabList.appendChild(item);
 }
 
+function _layoutSearch(height) {
+  var i = document.querySelector('.tab-item');
+  var list = document.querySelector('.tab-list');
+  var num = 0;
+
+  if (i) {
+    var list = i.parentNode;
+    num = list.childNodes.length;
+
+    console.log('n:>', num);
+
+    if (num > 4) {
+      num = 4;
+    }
+
+    num *= i.offsetHeight;
+  }
+
+  list.style.height = num + 'px';
+}
+
 function _openSearch(port) {
+  if (document.querySelectorAll('.tab-wrapper').length > 0) _closeSearch();
   console.log(port);
   _port = port;
   opened = true;
+  wrapper = document.createElement('div');
+  wrapper.classList.add('tab-wrapper');  
   holder = document.createElement('div');
   holder.classList.add('tab-search');
   tabList = document.createElement('div');
   tabList.classList.add('tab-list');
 
   setTimeout(function() {
-    holder.classList.add('fadeIn');
+    wrapper.classList.add('fadeIn');
   }, 0);
 
   var input = document.createElement('input');
 
   input.placeholder = 'Tab Search';
 
+  wrapper.appendChild(holder);
   holder.appendChild(input);
   holder.appendChild(tabList);
-  document.body.appendChild(holder);
+  document.body.appendChild(wrapper);
   
   input.focus();
 
@@ -64,18 +88,18 @@ function _openSearch(port) {
   });
   input.addEventListener('keydown', function(e) {
     var val = input.value.trim();
-
-    // por
-
-    if (e.keyCode === 38) {
-
-    } else if (e.keyCode === 40) {
+    
+    if (e.which === 40) {
+      //up
+    } else if (e.which === 38) {
+      //down
 
     } else if (e.keyCode === 27) {
       return _closeSearch();
     } else if (e.keyCode === 8 && val.length === 0) {
       return _closeSearch();
     } else if (e.keyCode === 13 && val.length > 0) {
+
       var tabs = _tabs.filter(function(tab) {
         return tab.url.indexOf(val) >= 0 || tab.title.trim().toLowerCase().indexOf(val) >= 0;
       });
@@ -106,21 +130,39 @@ function _openSearch(port) {
     });
 
     tabs.map(_listTab);
+
+    // _layoutSearch();
+  });
+
+  input.addEventListener('input', function() {
+    console.log('ye');
+    _layoutSearch();
+  //   var i = document.querySelector('.tab-item');
+  //   var list = i.parentNode;
+  //   var num = list.childNodes.length;
+
+  //   console.log('n:>', num);
+
+  //   if (num > 4) {
+  //     num = 4;
+  //   }
+
+  //   list.style.height = (i.offsetHeight * num) + 'px';
   });
 }
 
 function _closeSearch() {
   opened = false;
 
-  if (holder) {
-    holder.classList.remove('fadeIn');
+  if (wrapper) {
+    wrapper.classList.remove('fadeIn');
+  }
+
+  if (wrapper) {
+    wrapper.parentNode.removeChild(wrapper);
   }
   setTimeout(function() {
-    if (holder) {
-      holder.parentNode.removeChild(holder);
-    }
-
-    holder = null;
+    wrapper = null;
     tabList = null;
     _port = null;
   }, 250);
