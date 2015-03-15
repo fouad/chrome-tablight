@@ -6,6 +6,10 @@ var opened = false;
 var _tabs = [];
 
 function _listTab(tab) {
+  if (!tabList) {
+    return
+  }
+
   var item = document.createElement('div');
   item.classList.add('tab-item');
   var title = document.createElement('h2');
@@ -65,7 +69,7 @@ function _layoutSearch(height) {
   var list = document.querySelector('.tab-list');
   var num = 0;
 
-  if (i) {
+  if (i && i.parentNode) {
     var list = i.parentNode;
     num = list.childNodes.length;
 
@@ -107,15 +111,15 @@ function _openSearch(port) {
   
   input.focus();
 
-  input.addEventListener('click', function(e) {
+  input.addEventListener('click', (e) => {
     e.stopPropagation();
   }, false);
-  document.addEventListener('keydown', function(e) {
+  document.addEventListener('keydown', (e) => {
     if (e.keyCode === 27) {
       return _closeSearch();
     }
   });
-  input.addEventListener('keydown', function(e) {
+  input.addEventListener('keydown', (e) => {
     var val = input.value.trim();
     
     if (e.which === 40) {
@@ -142,18 +146,18 @@ function _openSearch(port) {
   input.addEventListener('keyup', function() {
     var val = input.value.trim().toLowerCase();
 
+    while (tabList && tabList.firstChild) {
+      tabList.removeChild(tabList.firstChild);
+    }
+
+    _cursor = null;
+
+    if (val.length === 0) {
+      return;
+    }
+
     // TODO: modify to grab results
     _port.postMessage({query: val});
-
-    // while (tabList.firstChild) {
-    //   tabList.removeChild(tabList.firstChild);
-    // }
-
-    // if (val.length === 0) {
-    //   return;
-    // }
-
-    // _cursor = null;
 
     // var tabs = _tabs.filter(function(tab) {
     //   return tab.url.indexOf(val) >= 0 || tab.title.trim().toLowerCase().indexOf(val) >= 0;
@@ -162,7 +166,7 @@ function _openSearch(port) {
     // tabs.map(_listTab);
   });
 
-  input.addEventListener('input', function() {
+  input.addEventListener('input', () => {
     _layoutSearch();
   //   var i = document.querySelector('.tab-item');
   //   var list = i.parentNode;
@@ -185,10 +189,10 @@ function _closeSearch() {
     wrapper.classList.remove('fadeIn');
   }
 
-  if (wrapper) {
+  if (wrapper && wrapper.parentNode) {
     wrapper.parentNode.removeChild(wrapper);
   }
-  setTimeout(function() {
+  setTimeout(() => {
     wrapper = null;
     tabList = null;
     _port = null;
@@ -216,15 +220,22 @@ function _listen() {
 }
 
 function loadTabs(response) {
-  _tabs = response.tabs;
+  _tabs = response.tabs || response.results;
+  console.log(response.results);
+  if (_tabs && _tabs.length) {
+    _tabs.map(_listTab);
+  }
 }
 
 function TabSearch() {
   chrome.runtime.onConnect.addListener(function(port) {
     port.onMessage.addListener(function(msg) {
-      if (msg.hasOwnProperty('tabs')) {
+      if (msg.hasOwnProperty('results')) {
         loadTabs(msg);
-
+        console.log('results ' + msg.results.length)
+      } else if (msg.hasOwnProperty('tabs')) {
+        loadTabs(msg);
+        console.log('tabs ' + msg.tabs.length)
         if (!opened) {
           _openSearch(port);
           document.addEventListener('click', _listenBack);

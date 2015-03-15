@@ -10,26 +10,28 @@ actions.push([History.expose(), History]);
 
 module.exports = {
   search(text, cb) {
-    var promise = new Promise();
-    
-    async.mapEach(actions, (a, cb) => {
-      let props = a[0];
-      let action = a[1];
+    var promise = new Promise((resolve, reject) => {
+      async.map(actions, (a, cb) => {
+        let props = a[0];
+        let action = a[1];
 
-      // check if action is appropriate (for performance)
-      if (props.regex.test(text)) {
-        new action(text, (results) => {
-          cb(results);
-        });
-      } else {
-        cb([]);
-      }
-    }, (err, results) => {
-      if (err) {
-        promise.reject(err);
-      }
+        // check if action is appropriate (for performance)
+        if (props.regex.test(text)) {
+          new action(text, (results) => {
+            console.log('inne', results)
+            cb(null, results);
+          });
+        } else {
+          cb(null, []);
+        }
+      }, (err, results) => {
+        resolve(results.reduce((a, b) => {
+          b.map((d) => a.push(d));
 
-      promise.resolve(results);
+          return a;
+        }, []));
+
+      });
     });
 
     return promise;
