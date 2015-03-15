@@ -30,6 +30,48 @@ function _listTab(tab) {
   tabList.appendChild(item);
 }
 
+function msToTime(duration) {
+    var milliseconds = parseInt((duration%1000)/100)
+        , seconds = parseInt((duration/1000)%60)
+        , minutes = parseInt((duration/(1000*60))%60)
+        , hours = parseInt((duration/(1000*60*60))%24);
+
+    hours = (hours < 10) ? "0" + hours : hours;
+    minutes = (minutes < 10) ? "0" + minutes : minutes;
+    seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+    return hours + " hours " + minutes + " minutes " + seconds + " seconds";
+}
+
+function addHistory(history) {
+  var item = document.createElement('div');
+  item.classList.add('tab-item');
+
+  var title = document.createElement('h2');
+  title.classList.add('tab--title');
+  if (history.title) {
+    title.innerText = history.title;
+  } else {
+    debugger
+    // title.innerText = ;
+  }
+
+  var link = document.createElement('p');
+  link.classList.add('tab--link');
+  link.innerText = history.url;
+
+  var visit = document.createElement('span');
+  visit.classList.add('pull-right');
+  var lastSeen = msToTime(history.lastVisitTime);
+  visit.innerText = "Total Views: " + history.visitCount + ' - ' +  "lastseen: " + lastSeen;
+
+  item.appendChild(visit);
+  item.appendChild(title);
+  item.appendChild(link);
+
+  tabList.appendChild(item);
+}
+
 function _layoutSearch(height) {
   var i = document.querySelector('.tab-item');
   var list = document.querySelector('.tab-list');
@@ -38,8 +80,6 @@ function _layoutSearch(height) {
   if (i) {
     var list = i.parentNode;
     num = list.childNodes.length;
-
-    console.log('n:>', num);
 
     if (num > 4) {
       num = 4;
@@ -68,6 +108,7 @@ function _openSearch(port) {
   }, 0);
 
   var input = document.createElement('input');
+  input.setAttribute("autofocus", "true");
 
   input.placeholder = 'Tab Search';
 
@@ -130,12 +171,9 @@ function _openSearch(port) {
     });
 
     tabs.map(_listTab);
-
-    // _layoutSearch();
   });
 
   input.addEventListener('input', function() {
-    console.log('ye');
     _layoutSearch();
   //   var i = document.querySelector('.tab-item');
   //   var list = i.parentNode;
@@ -202,6 +240,10 @@ function TabSearch() {
           _openSearch(port);
           document.addEventListener('click', _listenBack);
         }
+      } else if (msg.hasOwnProperty('history')) {
+        for (var i = 0; i < msg.history.length; i++) {
+          addHistory(msg.history[i]);
+        };
       }
     });
   });

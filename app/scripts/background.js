@@ -69,6 +69,19 @@ function handleSpotlight(request) {
   if (request.hasOwnProperty('query')) {
     var query = request.query.trim();
 
+    var item = {
+      text: query,
+      maxResults: 10
+    };
+
+    chrome.history.search(item, function(res) {
+      if (res.length > 0) {
+        port.postMessage({
+          history: res
+        });
+      }
+    });
+
     if (query.indexOf('fb ') === 0) {
 
       chrome.tabs.query({url: '*://www.facebook.com/*'}, function(tabs) {
