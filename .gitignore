@@ -4,5 +4,9 @@ temp
 dist
 .sass-cache
 app/bower_components
+app/scripts/*.map
+app/scripts/actions.js
+app/scripts/search.js
+app/scripts/background.js
 test/bower_components
 package

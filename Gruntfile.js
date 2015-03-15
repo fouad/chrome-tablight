@@ -39,6 +39,10 @@ module.exports = function (grunt) {
                     livereload: true
                 }
             },
+            src: {
+                files: ['<%= config.src %>/{,*/}*.js'],
+                tasks: ['browserify']
+            },
             gruntfile: {
                 files: ['Gruntfile.js']
             },
@@ -132,6 +136,21 @@ module.exports = function (grunt) {
                 src: [
                     '<%= config.app %>/*.html'
                 ]
+            }
+        },
+
+        browserify: {
+            options: {
+                sourceMap: true
+            },
+            dist: {
+                files: {
+                    'app/scripts/background.js': 'src/background/index.js',
+                    'app/scripts/search.js': 'src/search/index.js'
+                },
+                options: {
+                  transform: ['babelify']
+                }
             }
         },
 
@@ -323,6 +342,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('default', [
         'test',
+        'browserify',
         'build'
     ]);
 };
