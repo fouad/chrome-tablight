@@ -221,7 +221,6 @@ function _listen() {
 
 function loadTabs(response) {
   _tabs = response.tabs || response.results;
-  console.log(response.results);
   if (_tabs && _tabs.length) {
     _tabs.map(_listTab);
   }
@@ -232,10 +231,8 @@ function TabSearch() {
     port.onMessage.addListener(function(msg) {
       if (msg.hasOwnProperty('results')) {
         loadTabs(msg);
-        console.log('results ' + msg.results.length)
       } else if (msg.hasOwnProperty('tabs')) {
         loadTabs(msg);
-        console.log('tabs ' + msg.tabs.length)
         if (!opened) {
           _openSearch(port);
           document.addEventListener('click', _listenBack);

@@ -7,6 +7,8 @@ app/bower_components
 app/scripts/*.map
 app/scripts/actions.js
 app/scripts/search.js
+npm-debug.log
 app/scripts/background.js
 test/bower_components
 package
+app/css/*

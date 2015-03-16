@@ -21,7 +21,7 @@ chrome.runtime.onInstalled.addListener(function(details){
 
 chrome.commands.onCommand.addListener(function(command) {
   var contentScript = chrome.extension.getURL('scripts/search.js');
-  var contentStyle = chrome.extension.getURL('styles/main.css');
+  var contentStyle = chrome.extension.getURL('css/style.css');
 
   chrome.tabs.query({active: true}, function(tabs) {
     var currentTab = tabs[0];
@@ -35,7 +35,7 @@ chrome.commands.onCommand.addListener(function(command) {
         port.onMessage.addListener(handleSpotlight.bind(port));
       });
     });
-    chrome.tabs.insertCSS({file: 'styles/main.css'});
+    chrome.tabs.insertCSS({file: 'css/style.css'});
   });
 });
 

@@ -20,7 +20,7 @@ chrome.runtime.onInstalled.addListener(function(details){
 
 chrome.commands.onCommand.addListener(function(command) {
   var contentScript = chrome.extension.getURL('scripts/contentscript.js');
-  var contentStyle = chrome.extension.getURL('styles/main.css');
+  var contentStyle = chrome.extension.getURL('css/style.css');
 
   chrome.tabs.query({active: true}, function(tabs) {
     var currentTab = tabs[0];

@@ -18,7 +18,6 @@ module.exports = {
         // check if action is appropriate (for performance)
         if (props.regex.test(text)) {
           new action(text, (results) => {
-            console.log('inne', results)
             cb(null, results);
           });
         } else {
