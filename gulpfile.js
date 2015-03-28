@@ -10,7 +10,7 @@ var paths = {
   js: ['app/**/*.js'],
   html: ['app/templates/**/*.html'],
   app: ['app/**/*.*'],
-  src: ['src/search/index.js', 'src/background/index.js'],
+  src: ['src/search/index.js', 'src/background/index.js'], //, 'src/search/cursor.js'
   dest: ['app/scripts/']
 };
 
@@ -51,7 +51,9 @@ gulp.task('js:search', function() {
 
   return gulp.src(paths.src[0])
     .pipe(browserified)
-    .pipe($.babel())
+    .pipe($.babel({
+      sourceMap: true
+    }))
     .pipe($.concat('search.js'))
     .pipe($.size())
     .pipe(gulp.dest(paths.dest[0]));
@@ -64,10 +66,18 @@ gulp.task('js:background', function() {
    });
   return gulp.src(paths.src[1])
     .pipe(browserified)
-    .pipe($.babel())
+    .pipe($.babel({
+      sourceMap: true
+    }))
     .pipe($.concat('background.js'))
     .pipe($.size())
-    .pipe(gulp.dest(paths.dest[0]));
+    .pipe(gulp.dest(paths.dest[0]))
+    .on('error', function(err) {
+      console.log(err);
+      })
+    .on('err', function(err) {
+      console.log('e2', err);
+    });
 });
 
 gulp.task('js', ['js:background', 'js:search']);

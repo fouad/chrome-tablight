@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "dependencies": {
     "async": "^0.9.0",
-    "collapse-array": "^2.0.0"
+    "collapse-array": "^2.0.0",
+    "debounce": "^1.0.0",
+    "paperclip": "^1.4.10"
   },
   "devDependencies": {
     "babelify": "^5.0.4",

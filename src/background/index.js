@@ -81,7 +81,7 @@ function handleSpotlight(request) {
       _gaq.push(['_trackEvent', 'Background', 'Activate']);
     }
 
-    chrome.tabs.update(request.activate, {active: true});
+    chrome.tabs.update(parseInt(request.activate), {active: true});
   } else if (request.hasOwnProperty('version')) {
     chrome.commands.getAll(function(commands) {
       port.postMessage({

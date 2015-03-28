@@ -6,13 +6,13 @@ var _tabs = [];
 
 function _listTab(tab) {
   var item = document.createElement('div');
-  item.classList.add('tab-item');
+  item.className = 'tab-item';
   var title = document.createElement('h2');
-  title.classList.add('tab--title');
+  title.className = 'tab--title';
   title.innerText = tab.title;
 
   var link = document.createElement('p');
-  link.classList.add('tab--link');
+  link.className = 'tab--link';
   link.innerText = tab.url;
 
   item.appendChild(title);
@@ -45,10 +45,10 @@ function msToTime(duration) {
 
 function addHistory(history) {
   var item = document.createElement('div');
-  item.classList.add('tab-item');
+  item.className = 'tab-item';
 
   var title = document.createElement('h2');
-  title.classList.add('tab--title');
+  title.className = 'tab--title';
   if (history.title) {
     title.innerText = history.title;
   } else {
@@ -57,11 +57,11 @@ function addHistory(history) {
   }
 
   var link = document.createElement('p');
-  link.classList.add('tab--link');
+  link.className = 'tab--link';
   link.innerText = history.url;
 
   var visit = document.createElement('span');
-  visit.classList.add('pull-right');
+  visit.className = 'pull-right';
   var lastSeen = msToTime(history.lastVisitTime);
   visit.innerText = "Total Views: " + history.visitCount + ' - ' +  "lastseen: " + lastSeen;
 
@@ -97,14 +97,14 @@ function _openSearch(port) {
   _port = port;
   opened = true;
   wrapper = document.createElement('div');
-  wrapper.classList.add('tab-wrapper');  
+  wrapper.className = 'tab-wrapper';  
   holder = document.createElement('div');
-  holder.classList.add('tab-search');
+  holder.className = 'tab-search';
   tabList = document.createElement('div');
-  tabList.classList.add('tab-list');
+  tabList.className = 'tab-list';
 
   setTimeout(function() {
-    wrapper.classList.add('fadeIn');
+    wrapper.className = 'tab-wrapper fadeIn';
   }, 0);
 
   var input = document.createElement('input');
